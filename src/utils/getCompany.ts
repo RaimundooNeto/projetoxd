@@ -64,8 +64,7 @@ export default async function ({ search, city, uf }:ISearchDTO): Promise<IInfoDa
 				
 				if (value.includes("<")) value = "N/A"
 				if (title.includes('CNPJ')) DATA['cnpj'] = value
-				if (title.includes('Nome Fantasia')) DATA['nmFantasia'] = value
-				if (title.includes('Razão Social')) DATA['rzSocial'] = value
+				if (title.includes('Razão Social')) DATA['empresa'] = value
 				if (title.includes('Situação Cadastral') && !title.includes('Data da')) DATA['sitCadastral'] = value
 				if (title.includes('Telefone')) DATA['telefoneRec'] = value
 				if (title.includes('E-MAIL')) DATA['email'] = value
