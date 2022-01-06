@@ -20,16 +20,10 @@ export default async function({ id, json }: IQueueDTO): Promise<void> {
     let queueStats = queueData.find(x => x.id == id)
 
     let forFind = json[i][Object.keys(json[i])[columnIndex]]
-    let telefone = json[i][Object.keys(json[i])[1]]
-    console.log(json[i])
     queueStats.last = forFind
 
-    let tryFind = await getCompany({ search: forFind })
-
+    const tryFind = await getCompany({ search: forFind })
     if (tryFind) {
-      console.log(telefone)
-      for (let i = 0; i < tryFind.length; i++)
-        tryFind[i]['telefone'] = telefone
       queueStats.finded++
       findedData.push(...tryFind)
     } else {
@@ -40,6 +34,8 @@ export default async function({ id, json }: IQueueDTO): Promise<void> {
     queueData[queueData.findIndex(x => x.id == id)] = queueStats
     fs.writeFileSync(path + "/src/queue.json", JSON.stringify(queueData, null, 4), { encoding: "utf-8" })
   }
+
+  findedData.push(...notFinded)
 
   await jsonXlxs(id, findedData)
 }

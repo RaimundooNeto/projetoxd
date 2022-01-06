@@ -1,4 +1,0 @@
-[X] - Tirar os em brancos
-[X] - Corrigir consulta for
-[X] - Manter o campo telefone e criar uma coluna chamada telefone recente que pegue o ultimo telefone da empresa
-[X] - Salva endereco

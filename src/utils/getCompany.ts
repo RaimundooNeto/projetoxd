@@ -46,35 +46,28 @@ export default async function ({ search, city, uf }:ISearchDTO): Promise<IInfoDa
 		}
 		if (foundedOnPartner) {
 			//GET INFO DATA AND PARSE
-			let personRaw:any = await page.$$('div.is-narrow')
-			let DATA:any = { name: search }
-			let fullAddress = ""
-			let affiliedsRaw:any = ""
+			var personRaw:any = await page.$$('div.is-narrow')
+			var DATA:any = { name: search }
+			
+			var affiliedsRaw:any = ""
 			for (let i = 0; i < personRaw.length; i++) {
-				let info = await page.evaluate(el => el.innerHTML, personRaw[i])
+				var info = await page.evaluate(el => el.innerHTML, personRaw[i])
 				if (info.includes("</b"))
 					affiliedsRaw = info
-				let value
-				let title = info.split('<p data-v-0adacb42="" class="has-text-weight-bold">').pop().split('</p>')[0]
+				var value
 				if (!info.includes("href")) {
 					value = info.split('"">').pop().split('</p>')[0]
 				} else {
 					value = info.split('">').pop().split('</a>')[0]
 				}
-				
+				//BAIANAGEM MAS DEU CERTO, SLA, DPS TEM QUE REFATORAR ISSO.
 				if (value.includes("<")) value = "N/A"
-				if (title.includes('CNPJ')) DATA['cnpj'] = value
-				if (title.includes('Razão Social')) DATA['empresa'] = value
-				if (title.includes('Situação Cadastral') && !title.includes('Data da')) DATA['sitCadastral'] = value
-				if (title.includes('Telefone')) DATA['telefoneRec'] = value
-				if (title.includes('E-MAIL')) DATA['email'] = value
-				if (title.includes('Logradouro')) fullAddress += `${value} `
-				if (title.includes('Número')) fullAddress += `${value} `
-				if (title.includes('Complemento')) fullAddress += `${value} `
-				if (title.includes('CEP')) fullAddress += `${value} `
-				if (title.includes('Bairro')) fullAddress += `${value} `
+				if (i == 0) DATA['cnpj'] = value
+				if (i == 1) DATA['empresa'] = value
+				if (i == 5) DATA['sitCadastral'] = value
+				if (i == 17) DATA['telefone'] = value
+				if (i == 18) DATA['email'] = value
 			}
-			DATA['address'] = fullAddress
 			totalData.push(DATA)
 		}
 	}
